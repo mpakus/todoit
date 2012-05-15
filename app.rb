@@ -110,6 +110,10 @@ get "/" do
   erb :index
 end
 
+post "/" do
+  redirect "/"
+end
+
 put '/task' do
   id = params[:id]
   return {error: 'Sorry, no id, no cry'}.to_json unless id
@@ -153,10 +157,6 @@ post '/task' do
 end
 
 # Facebook
-
-post "/" do
-  redirect "/"
-end
 
 get "/close" do
   "<body onload='window.close();'/>"
