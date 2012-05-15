@@ -101,7 +101,7 @@ end
 
 #--- Work Application
 
-get "/" do
+get '/' do
   layout :layout
   current_user
   if @user
@@ -110,8 +110,8 @@ get "/" do
   erb :index
 end
 
-post "/" do
-  redirect "/"
+post '/' do
+  redirect '/', 301
 end
 
 put '/task' do
