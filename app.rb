@@ -103,7 +103,18 @@ end
 
 get '/' do
   layout :layout
-  current_user
+  # current_user
+  
+  # Get base API Connection
+  @graph  = Koala::Facebook::API.new(session[:access_token])
+
+  # Get public details of current application
+  @app  =  @graph.get_object(ENV["FACEBOOK_APP_ID"])
+
+  if session[:access_token]
+    @user    = @graph.get_object("me")
+  end
+
   if @user
     @tasks = Todo.all(user_id: @user[:id], order: [:created_at.desc], closed: 0 )
   end
@@ -111,13 +122,7 @@ get '/' do
 end
 
 post '/' do
-  # redirect '/', 301
-  layout :layout
-  current_user
-  if @user
-    @tasks = Todo.all(user_id: @user[:id], order: [:created_at.desc], closed: 0 )
-  end
-  erb :index
+   redirect '/', 301
 end
 
 put '/task' do
