@@ -7,8 +7,8 @@ require 'json'
 
 enable :sessions
 DataMapper.setup(:default, ENV['DATABASE_URL'] || "mysql://root:900@localhost/todofb_development")
-ENV['FACEBOOK_APP_ID'] = '202941423160360'
-ENV['FACEBOOK_SECRET'] = '1bd559c64cd31200178dc702ed3125f3'
+ENV['FACEBOOK_APP_ID'] = '170394403089741' #'202941423160360'
+ENV['FACEBOOK_SECRET'] =  '64db72191ca73da65c0266387cc99c91' #1bd559c64cd31200178dc702ed3125f3'
 
 configure :production do
   disable :raise_errors, :show_exceptions, :logging
