@@ -10,6 +10,7 @@ DataMapper.setup(:default, ENV['DATABASE_URL'] || "mysql://root:900@localhost/to
 
 configure :production do
   enable :raise_errors, :show_exceptions, :logging
+  set :protection, :except => [:remote_token, :frame_options]
 end
 
 configure :development do 
