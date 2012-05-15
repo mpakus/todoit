@@ -1,17 +1,34 @@
-<form method="POST" action="/task" onSubmit="return TODO.add_task();">  
-	<input type="text" name="task" id="task" style="width:90%" /> <input type="submit" value=" + " />
-</form>
+<header class="clearfix">
+  <% if @user %>
+    <p id="picture" style="background-image: url(https://graph.facebook.com/<%= @user['id'] %>/picture?type=normal)"></p>
+    <div>
+      <h1>Welcome, <strong><%= @user['name'] %></strong></h1>
+    </div>
+    <div>
+      <form method="POST" action="/task" onSubmit="return TODO.add_task();">  
+        <input type="text" name="task" id="task" style="width:90%" /> <input type="submit" value=" + " />
+      </form>
 
-<% if @tasks %>
-	<ul id="task_list">
-		<% @tasks.each do |task| %>
-			<%= task_tag task %>
-		<% end %>
-	</ul>
-<% end %>
+      <% if @tasks %>
+        <ul id="task_list">
+          <% @tasks.each do |task| %>
+            <%= task_tag task %>
+          <% end %>
+        </ul>
+      <% end %>
 
-<script type="text/javascript">
-  $(function() {
-    TODO.set_completed_event( '#task_list input[type=checkbox]' );
-  });
-</script>
+      <script type="text/javascript">
+        $(function() {
+          TODO.set_completed_event( '#task_list input[type=checkbox]' );
+        });
+      </script>
+    </div>
+  <% else %>
+    <div>
+      <h1>Welcome</h1>
+        <a href='/auth/facebook' class="fb_button fb_button_medium">
+          <span class="fb_button_text">Log In</span>
+        </a>
+    </div>
+  <% end %>
+</header>

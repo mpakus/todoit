@@ -45,7 +45,7 @@ unless ENV["FACEBOOK_APP_ID"] && ENV["FACEBOOK_SECRET"]
 end
 
 before do
-  @app = { name: 'ToDoIt' }
+  # @app = { name: 'ToDoIt' }
   # HTTPS redirect
   if settings.environment == :production && request.scheme != 'https'
     redirect "https://#{request.env['HTTP_HOST']}"
@@ -73,7 +73,17 @@ helpers do
     @user = {}
     if(settings.environment == :development)
       @user[:id] = 100
+    else
+      @graph  = Koala::Facebook::API.new(session[:access_token])
+      @app  =  @graph.get_object(ENV["FACEBOOK_APP_ID"])
+      if session[:access_token]
+        @user    = @graph.get_object("me")
+      end      
     end    
+  end
+
+  def authenticator
+    @authenticator ||= Koala::Facebook::OAuth.new(ENV["FACEBOOK_APP_ID"], ENV["FACEBOOK_SECRET"], url("/auth/facebook/callback"))
   end
 
   def task_tag(task)
@@ -83,17 +93,18 @@ helpers do
 
 end
 
-
-post "/" do
-  redirect "/"
+# the facebook session expired! reset ours and restart the process
+error(Koala::Facebook::APIError) do
+  session[:access_token] = nil
+  redirect "/auth/facebook"
 end
 
-# Work Application
+#--- Work Application
 
 get "/" do
   layout :layout
   current_user
-  @tasks = Todo.all(user_id: @user[:id], order: [:created_at.desc], closed: 0 )
+  @tasks = Todo.all(user_id: @user[:id], order: [:created_at.desc], closed: 0 ) if @user
   erb :index
 end
 
@@ -123,6 +134,7 @@ end
 
 post '/task' do
   current_user
+  redirect '/' unless @user  
   todo = Todo.create(task: params[:task], user_id: @user[:id])
   if todo.save
   else
@@ -139,3 +151,26 @@ post '/task' do
 end
 
 # Facebook
+
+post "/" do
+  redirect "/"
+end
+
+get "/close" do
+  "<body onload='window.close();'/>"
+end
+
+get "/sign_out" do
+  session[:access_token] = nil
+  redirect '/'
+end
+
+get "/auth/facebook" do
+  session[:access_token] = nil
+  redirect authenticator.url_for_oauth_code(:permissions => FACEBOOK_SCOPE)
+end
+
+get '/auth/facebook/callback' do
+  session[:access_token] = authenticator.get_access_token(params[:code])
+  redirect '/'
+end
