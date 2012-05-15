@@ -9,7 +9,7 @@ enable :sessions
 DataMapper.setup(:default, ENV['DATABASE_URL'] || "mysql://root:900@localhost/todofb_development")
 
 configure :production do
-  disable :raise_errors, :show_exceptions, :logging
+  enable :raise_errors, :show_exceptions, :logging
 end
 
 configure :development do 
@@ -122,7 +122,7 @@ get '/' do
 end
 
 post '/' do
-   redirect '/', 301
+   redirect '/'
 end
 
 put '/task' do
