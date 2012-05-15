@@ -111,7 +111,13 @@ get '/' do
 end
 
 post '/' do
-  redirect '/', 301
+  # redirect '/', 301
+  layout :layout
+  current_user
+  if @user
+    @tasks = Todo.all(user_id: @user[:id], order: [:created_at.desc], closed: 0 )
+  end
+  erb :index
 end
 
 put '/task' do
