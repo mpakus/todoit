@@ -126,6 +126,7 @@
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
 
+      // ToDoIt
       var TODO = {
         add_task : function(){
           var task = $('#task').val();
@@ -135,7 +136,7 @@
           }
           $.ajax({
               type : 'POST',
-              url  : '/task',
+              url  : '<%= url('/task') %>',
               data : {
                 'task' : task
               },
@@ -162,7 +163,7 @@
           }
           $.ajax({
               type : 'PUT',
-              url  : '/task',
+              url  : '<%= url('/task') %>',
               data : {
                 'id' : id
               },
@@ -183,7 +184,7 @@
           
           $.ajax({
               type : 'DELETE',
-              url  : '/task',
+              url  : '<%= url('/task') %>',
               data : {
                 'id' : id
               },
@@ -198,8 +199,6 @@
       };
     </script>
 
-    <section class="clearfix">
-      <%= yield %>
-    </section>
+  <%= yield %>
   </body>
 </html>

@@ -70,16 +70,16 @@ helpers do
   end
 
   def current_user
-    @user = {}
-    if(settings.environment == :development)
-      @user[:id] = 100
-    else
+    # @user = {}
+    # if(settings.environment == :development)
+    #   @user[:id] = 100
+    # else
       @graph  = Koala::Facebook::API.new(session[:access_token])
       @app  =  @graph.get_object(ENV["FACEBOOK_APP_ID"])
       if session[:access_token]
         @user    = @graph.get_object("me")
       end      
-    end    
+    # end    
   end
 
   def authenticator
