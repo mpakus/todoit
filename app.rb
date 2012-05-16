@@ -27,8 +27,8 @@ class Todo
   include DataMapper::Resource
 
   property :id,         Serial
-  # property :user_id,    String, :key => true, :length => 32 # :min => 0, :max => 2**64
-  property :user_id,    Integer, :key => true, :min => 0, :max => 2**32
+  property :user_id,    String, :key => true, :length => 32 # :min => 0, :max => 2**64
+  #property :user_id,    Integer, :key => true, :min => 0, :max => 2**32
   property :task,       String
   property :closed,     Boolean, :default => false
   property :closed_at,  DateTime
@@ -38,7 +38,7 @@ class Todo
   validates_presence_of :task
   validates_length_of   :task, :minimum => 1
 end
-# DataMapper.auto_migrate!
+DataMapper.auto_migrate!
 DataMapper.finalize
 
 # facebook ACL and ENV check
