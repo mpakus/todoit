@@ -128,12 +128,25 @@
 
       // ToDoIt
       var TODO = {
+        send_ajax : function( url, event, params ){
+          var ajax = new Ajax();
+          ajax.responseType = Ajax.JSON;
+          ajax.ondone = event;
+
+          ajax.post(
+            url,
+            params
+          );
+        },
+
         add_task : function(){
           var task = $('#task').val();
           if(task==""){
             alert('Ooops, you should type the task');
             return false;
           }
+          TODO.send_ajax('<%= url_no_scheme('/task') %>', TODO.after_add_task, {'task':task});
+          /**
           $.ajax({
               type : 'POST',
               headers: {'Cookie' : document.cookie },
@@ -144,6 +157,7 @@
               success  : TODO.after_add_task,
               dataType : 'JSON'
           });
+          **/
           return false;
         },
         after_add_task : function( task ){
