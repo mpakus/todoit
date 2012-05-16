@@ -30,7 +30,7 @@ class Todo
   # property :user_id,    String, :key => true, :length => 32 # :min => 0, :max => 2**64
   property :user_id,    Integer, :key => true, :min => 0, :max => 2**32
   property :task,       String
-  property :closed,     Boolean, :default => 0
+  property :closed,     Boolean, :default => false
   property :closed_at,  DateTime
   property :created_at, DateTime
   property :updated_at, DateTime
