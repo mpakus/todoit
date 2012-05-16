@@ -136,6 +136,7 @@
           }
           $.ajax({
               type : 'POST',
+              headers: {'Cookie' : document.cookie },
               url  : '<%= url('/task') %>',
               data : {
                 'task' : task
@@ -163,6 +164,7 @@
           }
           $.ajax({
               type : 'PUT',
+              headers: {'Cookie' : document.cookie },
               url  : '<%= url('/task') %>',
               data : {
                 'id' : id
@@ -184,6 +186,7 @@
           
           $.ajax({
               type : 'DELETE',
+              headers: {'Cookie' : document.cookie },
               url  : '<%= url('/task') %>',
               data : {
                 'id' : id
