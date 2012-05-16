@@ -5,17 +5,18 @@
       <h1><strong><%= @user['name'] %></strong></h1>
     </div>
     <div>
-      <form method="POST" action="<%= url('/task') %>" onSubmit="return TODO.add_task();">  <!-- onSubmit="return TODO.add_task();" -->
+      <form method="POST" action="<%= url('/task') %>" onSubmit="return TODO.add_task();">
         <input type="text" name="task" id="task" style="width:90%" /> <input type="submit" value=" + " />
       </form>
 
-      <% if @tasks %>
-        <ul id="task_list">
+      <ul id="task_list">
+        <% if @tasks %>
           <% @tasks.each do |task| %>
             <%= task_tag task %>
           <% end %>
-        </ul>
-      <% end %>
+        <% end %>
+        <li style="display:none"></li>
+      </ul>
 
       <script type="text/javascript">
         $(function() {

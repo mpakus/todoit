@@ -145,7 +145,6 @@
             alert('Ooops, you should type the task');
             return false;
           }
-
           FB.api('/me', function(me){
             // console.log(apiresponse);
             me.task = task;
@@ -157,13 +156,10 @@
                 dataType : 'JSON'
             });
           });
-          // TODO.send_ajax('<%= url_no_scheme('/task') %>', TODO.after_add_task, {'task':task});
-
-          
           return false;
         },
         after_add_task : function( task ){
-          if( task.error != "" ){ alert(task.error); }
+          if( task.error ){ alert(task.error); }
 
           $('#task').val('');
           $('#task_list li:first').before( task.html );
@@ -180,15 +176,15 @@
             alert('No  :id, no cry');
             return false;
           }
-          $.ajax({
-              type : 'PUT',
-              headers: {'Cookie' : document.cookie },
-              url  : '<%= url_no_scheme('/task') %>',
-              data : {
-                'id' : id
-              },
-              success  : TODO.after_complete,
-              dataType : 'JSON'
+          FB.api('/me', function(me){
+            me.task_id = id;
+            $.ajax({
+                type : 'PUT',
+                url  : '<%= url_no_scheme('/task') %>',
+                data : me,
+                success  : TODO.after_complete,
+                dataType : 'JSON'
+            });
           });
         },
         after_complete : function( task ){
@@ -201,17 +197,16 @@
             return false;
           }
           if( !confirm('Are you sure?') ) return false;
-          
-          $.ajax({
-              type : 'DELETE',
-              headers: {'Cookie' : document.cookie },
-              url  : '<%= url_no_scheme('/task') %>',
-              data : {
-                'id' : id
-              },
-              success  : TODO.after_complete,
-              dataType : 'JSON'
-          });
+          FB.api('/me', function(me){
+            me.task_id = id;
+            $.ajax({
+                type : 'DELETE',
+                url  : '<%= url_no_scheme('/task') %>',
+                data : me,
+                success  : TODO.after_complete,
+                dataType : 'JSON'
+            });
+          });          
         },
         after_del : function( task ){
           $('#li-'+task.id).hide('slow');

@@ -15,10 +15,10 @@ configure :production do
 end
 
 configure :development do 
-  ENV['FACEBOOK_APP_ID'] = '170394403089741' #'202941423160360'
-  ENV['FACEBOOK_SECRET'] =  '64db72191ca73da65c0266387cc99c91' #1bd559c64cd31200178dc702ed3125f3'
+  ENV['FACEBOOK_APP_ID'] = '202941423160360'
+  ENV['FACEBOOK_SECRET'] =  '1bd559c64cd31200178dc702ed3125f3'
   set :port, '9393'
-  #Log = Logger.new("public/sinatra.log.txt")
+  Log = Logger.new("log/sinatra.log.txt")
   #Log.level  = Logger::INFO 
   enable :logging, :dump_errors, :raise_errors, :show_exceptions
 end
@@ -27,7 +27,7 @@ class Todo
   include DataMapper::Resource
 
   property :id,         Serial
-  property :user_id,    Integer#, :key => true
+  property :user_id,    String, :key => true, :length => 32 # :min => 0, :max => 2**64
   property :task,       String
   property :closed,     Boolean, :default => 0
   property :closed_at,  DateTime
@@ -118,7 +118,7 @@ get '/' do
   end
 
   if @user
-    @tasks = Todo.all(user_id: @user[:id], order: [:created_at.desc], closed: 0 )
+    @tasks = Todo.all(user_id: @user['id'].to_i, order: [:created_at.desc], closed: 0 )
   end
   erb :index
 end
@@ -128,9 +128,10 @@ post '/' do
 end
 
 put '/task' do
-  id = params[:id]
+  # @todo: need check task and user_id
+  id = params[:task_id].to_i
   return {error: 'Sorry, no id, no cry'}.to_json unless id
-  task = Todo.get(id)
+  task = Todo.first( id: id)
   task.update(closed: 1, closed_at: Time.now)
   if request.xhr?
     {id: task.id}.to_json
@@ -140,9 +141,10 @@ put '/task' do
 end
 
 delete '/task' do
-  id = params[:id]
+  # @todo: need check task and user_id
+  id = params[:task_id].to_i
   return { error: 'Sorry, no id, no cry' }.to_json unless id
-  task = Todo.get(id)
+  task = Todo.first( id: id)
   task.destroy
   if request.xhr?
     {id: task.id}.to_json
@@ -155,22 +157,19 @@ post '/task' do
   user_id = params[:id]
   return {error:"Access denied, you should be authorized"}.to_json unless user_id
 
-  p params.inspect
-  
-  todo = Todo.create(task: params[:task], user_id: user_id)
-  p todo.save
-  # if todo.save
-  # else
-  #   todo.errors.each do |error|
-  #     puts error
-  #   end
-  # end
-  if request.xhr?
-    task = Todo.last
-    p task
-    return {id: task[:id], task: task[:task], html: task_tag(task) }.to_json
+  todo = Todo.create(task: params[:task].to_s, user_id: user_id.to_i)
+  if todo.save
+    if request.xhr?
+      task = Todo.last
+      return {id: task[:id], task: task[:task], html: task_tag(task) }.to_json
+    else
+      redirect '/'
+    end
   else
-    redirect '/'
+    todo.errors.each do |error|
+      # puts error
+      logger.debug error
+    end
   end
 end
 
