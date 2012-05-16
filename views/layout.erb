@@ -147,24 +147,24 @@
           }
 
           FB.api('/me', function(me){
-              // console.log(apiresponse);
+            // console.log(apiresponse);
+            me.task = task;
+            $.ajax({
+                type : 'POST',
+                url  : '<%= url_no_scheme('/task') %>',
+                data : me,
+                success  : TODO.after_add_task,
+                dataType : 'JSON'
+            });
           });
           // TODO.send_ajax('<%= url_no_scheme('/task') %>', TODO.after_add_task, {'task':task});
 
-          me.task = task;
-
-          $.ajax({
-              type : 'POST',
-              url  : '<%= url_no_scheme('/task') %>',
-              data : me,
-              success  : TODO.after_add_task,
-              dataType : 'JSON'
-          });
+          
           return false;
         },
         after_add_task : function( task ){
           if( task.error != "" ){ alert(task.error); }
-          
+
           $('#task').val('');
           $('#task_list li:first').before( task.html );
           TODO.set_completed_event( 'check-'+task.id );
