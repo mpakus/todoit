@@ -38,7 +38,7 @@ class Todo
   validates_presence_of :task
   validates_length_of   :task, :minimum => 1
 end
-# DataMapper.auto_migrate!
+DataMapper.auto_migrate!
 DataMapper.finalize
 
 # facebook ACL and ENV check
