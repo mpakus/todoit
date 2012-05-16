@@ -2,7 +2,7 @@
   <% if @user %>
     <p id="picture" style="background-image: url(https://graph.facebook.com/<%= @user['id'] %>/picture?type=normal)"></p>
     <div>
-      <h1>Welcome, <strong><%= @user['name'] %></strong></h1>
+      <h1><strong><%= @user['name'] %></strong></h1>
     </div>
     <div>
       <form method="POST" action="<%= url('/task') %>" onSubmit="return TODO.add_task();">  
