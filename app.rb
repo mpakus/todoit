@@ -152,7 +152,13 @@ delete '/task' do
 end
 
 post '/task' do
-  @user = current_user
+  @graph  = Koala::Facebook::API.new(session[:access_token])
+  @app  =  @graph.get_object(ENV["FACEBOOK_APP_ID"])
+
+  if session[:access_token]
+    @user    = @graph.get_object("me")
+  end
+
   return {error:"Access denied, you should be authorized"}.to_json unless @user  
 
   todo = Todo.create(task: params[:task], user_id: @user[:id])
