@@ -152,7 +152,7 @@ delete '/task' do
 end
 
 post '/task' do
-  current_user
+  #current_user
   return {error:"Access denied, you should be authorized"}.to_json unless @user  
 
   todo = Todo.create(task: params[:task], user_id: @user[:id])
