@@ -76,10 +76,11 @@ helpers do
     # if(settings.environment == :development)
     #   @user[:id] = 100
     # else
-      @graph  = Koala::Facebook::API.new(session[:access_token])
-      @app  =  @graph.get_object(ENV["FACEBOOK_APP_ID"])
+      graph  = Koala::Facebook::API.new(session[:access_token])
+      # @app  =  @graph.get_object(ENV["FACEBOOK_APP_ID"])
+
       if session[:access_token]
-        @user    = @graph.get_object("me")
+        return graph.get_object("me")
       end      
     # end    
   end
@@ -109,7 +110,6 @@ get '/' do
   
   # Get base API Connection
   @graph  = Koala::Facebook::API.new(session[:access_token])
-
   # Get public details of current application
   @app  =  @graph.get_object(ENV["FACEBOOK_APP_ID"])
 
@@ -152,7 +152,7 @@ delete '/task' do
 end
 
 post '/task' do
-  #current_user
+  @user = current_user
   return {error:"Access denied, you should be authorized"}.to_json unless @user  
 
   todo = Todo.create(task: params[:task], user_id: @user[:id])
