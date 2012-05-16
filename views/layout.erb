@@ -140,30 +140,31 @@
         },
 
         add_task : function(){
-          FB.api('/me', function(apiresponse){
-              console.log(apiresponse);
-          });
           var task = $('#task').val();
           if(task==""){
             alert('Ooops, you should type the task');
             return false;
           }
+
+          FB.api('/me', function(me){
+              // console.log(apiresponse);
+          });
           // TODO.send_ajax('<%= url_no_scheme('/task') %>', TODO.after_add_task, {'task':task});
-          /**
+
+          me.task = task;
+
           $.ajax({
               type : 'POST',
-              headers: {'Cookie' : document.cookie },
               url  : '<%= url_no_scheme('/task') %>',
-              data : {
-                'task' : task
-              },
+              data : me,
               success  : TODO.after_add_task,
               dataType : 'JSON'
           });
-          **/
           return false;
         },
         after_add_task : function( task ){
+          if( task.error != "" ){ alert(task.error); }
+          
           $('#task').val('');
           $('#task_list li:first').before( task.html );
           TODO.set_completed_event( 'check-'+task.id );

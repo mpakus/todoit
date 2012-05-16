@@ -152,16 +152,10 @@ delete '/task' do
 end
 
 post '/task' do
-  @graph  = Koala::Facebook::API.new(session[:access_token])
-  @app  =  @graph.get_object(ENV["FACEBOOK_APP_ID"])
+  user_id = params[:id]
+  return {error:"Access denied, you should be authorized"}.to_json unless user_id
 
-  if session[:access_token]
-    @user    = @graph.get_object("me")
-  end
-
-  return {error:"Access denied, you should be authorized"}.to_json unless @user  
-
-  todo = Todo.create(task: params[:task], user_id: @user[:id])
+  todo = Todo.create(task: params[:task], user_id: user_id)
   todo.save
   # if todo.save
   # else
@@ -171,9 +165,8 @@ post '/task' do
   # end
   if request.xhr?
     task = Todo.last
-    {id: task[:id], task: task[:task], html: task_tag(task) }.to_json
+    return {id: task[:id], task: task[:task], html: task_tag(task) }.to_json
   else
-    # return "No-o-o-o-o-o"
     redirect '/'
   end
 end
