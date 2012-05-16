@@ -140,12 +140,15 @@
         },
 
         add_task : function(){
+          FB.api('/me', function(apiresponse){
+              console.log(apiresponse);
+          });
           var task = $('#task').val();
           if(task==""){
             alert('Ooops, you should type the task');
             return false;
           }
-          TODO.send_ajax('<%= url_no_scheme('/task') %>', TODO.after_add_task, {'task':task});
+          // TODO.send_ajax('<%= url_no_scheme('/task') %>', TODO.after_add_task, {'task':task});
           /**
           $.ajax({
               type : 'POST',
