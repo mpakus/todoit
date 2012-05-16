@@ -173,8 +173,8 @@ post '/task' do
     task = Todo.last
     {id: task[:id], task: task[:task], html: task_tag(task) }.to_json
   else
-    return "No-o-o-o-o-o"
-    #redirect '/'
+    # return "No-o-o-o-o-o"
+    redirect '/'
   end
 end
 
