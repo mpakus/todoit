@@ -66,7 +66,7 @@ helpers do
   def url_no_scheme(path = '')
     "//#{host}#{path}"
   end
-/
+
   def url(path = '')
     "#{scheme}://#{host}#{path}"
   end
