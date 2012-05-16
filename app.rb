@@ -155,8 +155,10 @@ post '/task' do
   user_id = params[:id]
   return {error:"Access denied, you should be authorized"}.to_json unless user_id
 
+  p params.inspect
+  
   todo = Todo.create(task: params[:task], user_id: user_id)
-  logger.info todo.save
+  p todo.save
   # if todo.save
   # else
   #   todo.errors.each do |error|
@@ -165,7 +167,7 @@ post '/task' do
   # end
   if request.xhr?
     task = Todo.last
-    lotter.info task
+    p task
     return {id: task[:id], task: task[:task], html: task_tag(task) }.to_json
   else
     redirect '/'
