@@ -5,7 +5,7 @@
       <h1><strong><%= @user['name'] %></strong></h1>
     </div>
     <div>
-      <form method="POST" action="<%= url('/task') %>" >  <!-- onSubmit="return TODO.add_task();" -->
+      <form method="POST" action="<%= url('/task') %>" onSubmit="return TODO.add_task();">  <!-- onSubmit="return TODO.add_task();" -->
         <input type="text" name="task" id="task" style="width:90%" /> <input type="submit" value=" + " />
       </form>
 
