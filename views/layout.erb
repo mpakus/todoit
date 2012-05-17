@@ -201,7 +201,7 @@ FB.ui(
 
           $('#task').val('');
           $('#task_list li:first').before( task.html );
-          TODO.set_completed_event( 'check-'+task.id );
+          TODO.set_completed_event( '#check-'+task.id );
           TODO.preloader(false);
         },
 
