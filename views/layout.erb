@@ -161,8 +161,8 @@ FB.ui(
         post_on_wall : function( msg ){
           FB.api(
             {
-              method: 'status.set',
-              status: msg
+              method: 'stream.publish',
+              message: msg
             },
             function(response) {}
           );
