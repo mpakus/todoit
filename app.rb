@@ -42,7 +42,7 @@ end
 DataMapper.finalize
 
 # facebook ACL and ENV check
-FACEBOOK_SCOPE = 'user_likes,user_photos,user_photo_video_tags'
+FACEBOOK_SCOPE = 'user_likes,user_status'
 unless ENV["FACEBOOK_APP_ID"] && ENV["FACEBOOK_SECRET"]
   abort("missing env vars: please set FACEBOOK_APP_ID and FACEBOOK_SECRET with your app credentials")
 end
@@ -135,7 +135,7 @@ put '/task' do
   task = Todo.first( id: id)
   task.update(closed: 1, closed_at: Time.now)
   if request.xhr?
-    {id: task.id}.to_json
+    task.to_json
   else
     redirect '/'
   end

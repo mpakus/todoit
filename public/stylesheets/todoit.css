@@ -1,0 +1,15 @@
+#preloader{
+  float: right;
+  margin-top: 5px;
+  margin-right: 20px;
+  width: 220px;
+  height: 20px;
+  display: none;
+}
+#task_list{ width: 90%; }
+hr{
+  color: #EEE;
+  height: 1px;
+  border: 1px solid #EEE;
+  background: #EEE;
+}

@@ -1,8 +1,9 @@
 <header class="clearfix">
+    <div id="preloader"><img src="/images/ajax-loader.gif" alt="Wait a second..." title="Just a second" /></div>
   <% if @user %>
     <p id="picture" style="background-image: url(https://graph.facebook.com/<%= @user['id'] %>/picture?type=normal)"></p>
     <div>
-      <h1><strong><%= @user['name'] %></strong></h1>
+      <h1>Hi, <strong><%= @user['name'] %></strong></h1>
     </div>
     <div>
       <form method="POST" action="<%= url('/task') %>" onSubmit="return TODO.add_task();">
@@ -17,9 +18,11 @@
         <% end %>
         <li style="display:none"></li>
       </ul>
+      <hr/>
+      <label><input type="checkbox" id="wall_notify" name="wall_notify" value="1" /> <strong>post notify</strong> on the your wall</label>
 
       <script type="text/javascript">
-        $(function() {
+        $(function() {          
           TODO.set_completed_event( '#task_list input[type=checkbox]' );
         });
       </script>
