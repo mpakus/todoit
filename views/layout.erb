@@ -229,7 +229,7 @@ FB.ui(
         },
         after_complete : function( task ){
           if( $('#wall_notify:checked').val() ){
-            TODO.post_on_wall('Completed: "'+task.task+'"');
+            TODO.post_on_wall('✔ '+task.task);
           }
           $('#li-'+task.id).hide('slow');
           TODO.preloader(false);
